@@ -1,35 +1,35 @@
-"use client";
+"use client"
 
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import type { NavItem } from "@/lib/content/types";
+import Image from "next/image"
+import { useEffect, useState } from "react"
+import type { NavItem } from "@/lib/content/types"
 
 type HeaderProps = {
-  nav: NavItem[];
-};
+  nav: NavItem[]
+}
 
 export function Header({ nav }: HeaderProps) {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   useEffect(() => {
     const onScroll = () => {
-      setIsScrolled(window.scrollY > 24);
-    };
+      setIsScrolled(window.scrollY > 24)
+    }
 
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    onScroll()
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
 
   useEffect(() => {
-    if (!isMenuOpen) return;
+    if (!isMenuOpen) return
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setIsMenuOpen(false);
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [isMenuOpen]);
+      if (event.key === "Escape") setIsMenuOpen(false)
+    }
+    window.addEventListener("keydown", onKeyDown)
+    return () => window.removeEventListener("keydown", onKeyDown)
+  }, [isMenuOpen])
 
   return (
     <header
@@ -39,17 +39,14 @@ export function Header({ nav }: HeaderProps) {
           : "border-b border-transparent bg-transparent"
       }`}
     >
-      <div className="container-shell flex items-center justify-between py-4">
-        <a
-          href="#hero"
-          className="flex items-center rounded-2xl border border-border bg-border px-3 py-2 shadow-[0_6px_20px_rgba(28,28,28,0.12)]"
-        >
+      <div className="container-shell flex items-center justify-between py-6 md:py-7">
+        <a href="#hero" className="flex items-center">
           <Image
-            src="/images/brand/logo-transparent.png"
+            src="/images/brand/logo-source.jpeg"
             alt="Logo Zodiak"
-            width={32}
-            height={48}
-            className="h-11 w-auto"
+            width={240}
+            height={240}
+            className="h-20 w-auto rounded-2xl bg-transparent shadow-[0_6px_20px_rgba(28,28,28,0.12)] md:h-24"
             priority
           />
         </a>
@@ -59,7 +56,7 @@ export function Header({ nav }: HeaderProps) {
           aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
           aria-expanded={isMenuOpen}
           onClick={() => setIsMenuOpen((value) => !value)}
-          className={`relative flex h-12 w-12 items-center justify-center rounded-2xl border md:hidden ${
+          className={`relative flex h-14 w-14 items-center justify-center rounded-2xl border md:hidden ${
             isScrolled || isMenuOpen
               ? "border-border bg-border text-ink"
               : "border-[#f6ebdc8c] bg-[#f6ebdc3b] text-inverse backdrop-blur"
@@ -108,21 +105,28 @@ export function Header({ nav }: HeaderProps) {
       >
         <div
           className={`mx-auto w-full max-w-[min(1100px,calc(100%-2rem))] origin-top rounded-3xl border border-border bg-bg/95 p-3 shadow-[0_18px_40px_rgba(28,28,28,0.16)] backdrop-blur-md transition-all duration-500 ${
-            isMenuOpen ? "translate-y-2 scale-y-100 opacity-100" : "-translate-y-4 scale-y-95 opacity-0"
+            isMenuOpen
+              ? "translate-y-2 scale-y-100 opacity-100"
+              : "-translate-y-4 scale-y-95 opacity-0"
           }`}
         >
-          <nav aria-label="Menú móvil" className="grid gap-1 text-sm uppercase tracking-[0.14em] text-ink">
+          <nav
+            aria-label="Menú móvil"
+            className="grid gap-1 text-sm uppercase tracking-[0.14em] text-ink"
+          >
             {nav.map((item, index) => (
               <a
                 key={item.href}
                 href={item.href}
                 onClick={() => setIsMenuOpen(false)}
                 className={`rounded-2xl px-4 py-3 transition hover:bg-surface hover:text-accentStrong ${
-                  isMenuOpen ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
+                  isMenuOpen
+                    ? "translate-y-0 opacity-100"
+                    : "translate-y-2 opacity-0"
                 }`}
                 style={{
                   transitionDuration: "380ms",
-                  transitionDelay: `${isMenuOpen ? 90 + index * 70 : 0}ms`
+                  transitionDelay: `${isMenuOpen ? 90 + index * 70 : 0}ms`,
                 }}
               >
                 {item.label}
@@ -132,5 +136,5 @@ export function Header({ nav }: HeaderProps) {
         </div>
       </div>
     </header>
-  );
+  )
 }
