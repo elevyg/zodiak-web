@@ -7,6 +7,7 @@ import { Header } from "@/components/sections/header";
 import { HeroSection } from "@/components/sections/hero-section";
 import { ProductsSection } from "@/components/sections/products-section";
 import { ReviewsSection } from "@/components/sections/reviews-section";
+import { StorySection } from "@/components/sections/story-section";
 import { getAboutMarkdown, getFaq, getGallery, getProducts, getSiteContent } from "@/lib/content/content";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -38,6 +39,7 @@ export default async function HomePage() {
       <Header nav={site.nav} />
       <main>
         <HeroSection hero={site.hero} instagram={site.social.instagram} />
+        <StorySection />
         <ReviewsSection reviews={site.reviews} />
         <BrandSection title={site.brandStory.title} paragraphs={site.brandStory.paragraphs} markdown={aboutMarkdown} />
         <ProductsSection items={products} />
