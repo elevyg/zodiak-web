@@ -13,7 +13,7 @@ export function HeroSection({ hero, instagram }: HeroSectionProps) {
       className="relative left-1/2 right-1/2 h-screen w-screen -translate-x-1/2 overflow-hidden"
     >
       <div className="flex h-full flex-col">
-        <div className="relative h-[85%] overflow-hidden md:h-[72%]">
+        <div className="relative h-[85%] overflow-hidden md:h-[87%]">
           <Image
             src={hero.image}
             alt={hero.imageAlt}
@@ -23,14 +23,14 @@ export function HeroSection({ hero, instagram }: HeroSectionProps) {
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#1c1c1ccc] via-[#1c1c1c86] to-[#1c1c1c3d]" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#1c1c1cbf] via-transparent to-[#f4a05430]" />
-          <div className="relative z-10 flex h-full flex-col justify-end p-6 pt-24 md:p-12 md:pt-28">
+          <div className="relative z-10 flex h-full flex-col justify-end p-6 pt-24 md:p-12 md:pt-36">
             <div className="flex w-full max-w-3xl flex-col items-start gap-2 text-inverse">
               <Image
                 src="/images/brand/zodiak-leters-white.png"
                 alt="Logo Zodiak"
                 width={110}
                 height={166}
-                className="stagger-in h-auto w-[60vw] max-w-[320px] md:max-w-[420px]"
+                className="stagger-in h-auto w-[60vw] max-w-[320px] md:mt-16 md:max-w-[300px]"
                 style={{ animationDelay: "900ms" }}
                 priority
               />
@@ -95,7 +95,7 @@ export function HeroSection({ hero, instagram }: HeroSectionProps) {
           </div>
         </div>
 
-        <div className="h-[15%] border-t border-border bg-inverse md:h-[28%]">
+        <div className="h-[15%] border-t border-border bg-inverse md:h-[13%]">
           <div className="container-shell flex h-full flex-col justify-center gap-4">
             <p
               className="stagger-in max-w-3xl text-lg leading-relaxed text-ink md:text-2xl"
