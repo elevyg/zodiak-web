@@ -6,14 +6,13 @@
     "ogDescription": "Top Les Vans y prendas exclusivas hechas a mano en San Carlos de Bariloche."
   },
   "nav": [
-    { "label": "Inicio", "href": "#hero" },
-    { "label": "Marca", "href": "#marca" },
     { "label": "Productos", "href": "#productos" },
-    { "label": "FAQ", "href": "#faq" },
+    { "label": "Quiénes somos", "href": "#marca" },
+    { "label": "Preguntas frecuentes", "href": "#faq" },
     { "label": "Contacto", "href": "#contacto" }
   ],
   "hero": {
-    "eyebrow": "Hecho a mano en Patagonia",
+    "eyebrow": "",
     "title": "La revolución en tops deportivos para mujeres que escalan",
     "subtitle": "Diseñamos prendas cómodas, reversibles y minimalistas para moverte en roca, montaña, yoga, agua o nieve. Ediciones limitadas, sin complicaciones.",
     "ctaPrimary": {
@@ -28,7 +27,7 @@
     "imageAlt": "Mujer escaladora usando top Zodiak en roca"
   },
   "brandStory": {
-    "title": "Exclusiva, funcional y real",
+    "title": "Quiénes somos",
     "paragraphs": [
       "Amamos viajar, la naturaleza, escalar y esquiar. Por eso diseñamos un top perfecto para que te sientas cómoda hagas lo que hagas.",
       "Nuestros productos se producen en un pequeño taller de San Carlos de Bariloche con telas de alta calidad y enfoque artesanal.",

@@ -36,7 +36,7 @@ export default async function HomePage() {
     <>
       <Header nav={site.nav} />
       <main>
-        <HeroSection hero={site.hero} />
+        <HeroSection hero={site.hero} instagram={site.social.instagram} />
         <BrandSection title={site.brandStory.title} paragraphs={site.brandStory.paragraphs} markdown={aboutMarkdown} />
         <ProductsSection items={products} />
         <GallerySection items={gallery} />

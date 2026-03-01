@@ -42,7 +42,7 @@ export function Header({ nav }: HeaderProps) {
       <div className="container-shell flex items-center justify-between py-4">
         <a
           href="#hero"
-          className="flex items-center gap-3 rounded-2xl border border-border bg-border px-3 py-2 shadow-[0_6px_20px_rgba(28,28,28,0.12)]"
+          className="flex items-center rounded-2xl border border-border bg-border px-3 py-2 shadow-[0_6px_20px_rgba(28,28,28,0.12)]"
         >
           <Image
             src="/images/brand/logo-transparent.png"
@@ -52,7 +52,6 @@ export function Header({ nav }: HeaderProps) {
             className="h-11 w-auto"
             priority
           />
-          <span className="text-sm font-semibold tracking-[0.16em] text-ink md:text-base">ZODIAK</span>
         </a>
 
         <button
