@@ -458,18 +458,44 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
                   }}
                   className="w-full rounded border border-[var(--border)] px-2 py-1.5 text-sm"
                 />
-                <input
-                  type="text"
-                  placeholder="Images (comma or one)"
-                  value={Array.isArray(item?.images) ? (item.images as string[]).join(", ") : (item?.images as string) ?? ""}
-                  onChange={(e) => {
-                    const next = [...items];
-                    const imgs = e.target.value.split(",").map((s) => s.trim()).filter(Boolean);
-                    next[i] = { ...next[i], images: imgs };
-                    setContentAndDirty(next);
-                  }}
-                  className="w-full rounded border border-[var(--border)] px-2 py-1.5 text-sm"
-                />
+                <div>
+                  <label className="block text-sm text-[var(--ink-muted)] mb-1">Images</label>
+                  {(Array.isArray(item?.images) ? (item.images as string[]) : []).map((img, j) => (
+                    <div key={j} className="flex items-center gap-2 mb-2">
+                      <ImageUpload
+                        value={img}
+                        onChange={(url) => {
+                          const next = [...items];
+                          const imgs = [...(next[i].images as string[])];
+                          imgs[j] = url;
+                          next[i] = { ...next[i], images: imgs };
+                          setContentAndDirty(next);
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const next = [...items];
+                          const imgs = (next[i].images as string[]).filter((_, k) => k !== j);
+                          next[i] = { ...next[i], images: imgs };
+                          setContentAndDirty(next);
+                        }}
+                        className="text-sm text-red-600 hover:underline shrink-0"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                  <ImageUpload
+                    value=""
+                    onChange={(url) => {
+                      const next = [...items];
+                      const imgs = [...(Array.isArray(next[i].images) ? (next[i].images as string[]) : []), url];
+                      next[i] = { ...next[i], images: imgs };
+                      setContentAndDirty(next);
+                    }}
+                  />
+                </div>
                 <button
                   type="button"
                   onClick={() => setContentAndDirty(items.filter((_, j) => j !== i))}
@@ -517,27 +543,19 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
                   )}
                 </div>
                 <div className="flex-1 min-w-[200px] space-y-2">
-                  <input
-                    type="text"
-                    placeholder="Image URL"
+                  <ImageUpload
                     value={item?.src ?? ""}
-                    onChange={(e) => {
+                    onChange={(url) => {
                       const next = [...items];
-                      next[i] = { ...next[i], src: e.target.value, alt: next[i]?.alt, width: next[i]?.width ?? 0, height: next[i]?.height ?? 0 };
+                      next[i] = { ...next[i], src: url };
                       setContentAndDirty(next);
                     }}
-                    className="w-full rounded border border-[var(--border)] px-2 py-1.5 text-sm"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Alt"
-                    value={item?.alt ?? ""}
-                    onChange={(e) => {
+                    alt={item?.alt}
+                    onAltChange={(v) => {
                       const next = [...items];
-                      next[i] = { ...next[i], alt: e.target.value };
+                      next[i] = { ...next[i], alt: v };
                       setContentAndDirty(next);
                     }}
-                    className="w-full rounded border border-[var(--border)] px-2 py-1.5 text-sm"
                   />
                   <label className="flex items-center gap-2 text-sm">
                     <input

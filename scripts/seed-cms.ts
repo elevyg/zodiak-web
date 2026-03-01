@@ -1,9 +1,7 @@
-import { config } from "dotenv";
+import "dotenv/config";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { getDocumentBySlug, upsertDocument } from "../src/lib/content/repository";
-
-config({ path: join(process.cwd(), ".env") });
 
 const contentDir = join(process.cwd(), "content");
 

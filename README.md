@@ -53,7 +53,13 @@ El contenido del sitio se edita desde un CMS protegido por contraseña.
 npm run upload-images
 ```
 
-Sube todas las imágenes de `public/images/` a UploadThing y escribe el mapeo (path → URL) en `scripts/upload-mapping.json`. Usa ese mapeo para actualizar el contenido en el CMS con las nuevas URLs.
+Sube todas las imágenes de `public/images/` a UploadThing y escribe el mapeo en `scripts/upload-mapping.json`. Luego aplica el mapeo al CMS:
+
+```bash
+npm run apply-upload-mapping
+```
+
+Actualiza los documentos site, story, products y gallery en Turso para usar las URLs de UploadThing.
 - Cada documento tiene su propio editor con campos específicos
 
 **Nota:** El área `/admin` no se indexa en buscadores (robots.txt).

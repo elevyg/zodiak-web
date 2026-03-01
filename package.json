@@ -11,6 +11,7 @@
     "migrate": "tsx scripts/run-migration.ts",
     "seed": "tsx scripts/seed-cms.ts",
     "upload-images": "tsx scripts/upload-images-to-uploadthing.ts",
+    "apply-upload-mapping": "tsx scripts/apply-upload-mapping.ts",
     "test": "vitest run"
   },
   "dependencies": {

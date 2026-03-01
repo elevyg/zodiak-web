@@ -1,9 +1,7 @@
-import { config } from "dotenv";
+import "dotenv/config";
 import { createClient } from "@libsql/client";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-
-config({ path: join(process.cwd(), ".env") });
 
 const url = process.env.TURSO_URL;
 const authToken = process.env.TURSO_TOKEN;

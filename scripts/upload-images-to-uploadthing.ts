@@ -1,9 +1,7 @@
-import { config } from "dotenv";
+import "dotenv/config";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { UTApi, UTFile } from "uploadthing/server";
-
-config({ path: join(process.cwd(), ".env") });
 
 const PUBLIC = join(process.cwd(), "public");
 const IMAGE_EXT = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
@@ -54,9 +52,9 @@ async function main() {
     const file = new UTFile([buf], name, { type: mimeFromExt(rel) });
     try {
       const res = await utapi.uploadFiles([file]);
-      const item = res[0];
-      const url = item?.url ?? (item as { data?: { url?: string } })?.data?.url;
-      const err = (item as { error?: { message?: string } })?.error;
+      const item = res[0] as unknown as { data?: { url?: string; ufsUrl?: string }; error?: { message?: string } };
+      const url = item?.data?.ufsUrl ?? item?.data?.url;
+      const err = item?.error;
       if (err) {
         console.error(`Upload failed for ${rel}:`, err.message ?? JSON.stringify(err));
       } else if (url) {
