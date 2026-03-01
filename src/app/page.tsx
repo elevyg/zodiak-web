@@ -8,7 +8,7 @@ import { HeroSection } from "@/components/sections/hero-section";
 import { ProductsSection } from "@/components/sections/products-section";
 import { ReviewsSection } from "@/components/sections/reviews-section";
 import { StorySection } from "@/components/sections/story-section";
-import { getAboutMarkdown, getFaq, getGallery, getProducts, getSiteContent } from "@/lib/content/content";
+import { getAboutMarkdown, getFaq, getGallery, getProducts, getSiteContent, getStoryContent } from "@/lib/content/content";
 
 export async function generateMetadata(): Promise<Metadata> {
   const site = await getSiteContent("es");
@@ -26,12 +26,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [site, products, faq, gallery, aboutMarkdown] = await Promise.all([
+  const [site, products, faq, gallery, aboutMarkdown, story] = await Promise.all([
     getSiteContent("es"),
     getProducts("es"),
     getFaq("es"),
     getGallery(),
-    getAboutMarkdown()
+    getAboutMarkdown(),
+    getStoryContent()
   ]);
 
   return (
@@ -39,7 +40,7 @@ export default async function HomePage() {
       <Header nav={site.nav} />
       <main>
         <HeroSection hero={site.hero} instagram={site.social.instagram} />
-        <StorySection />
+        <StorySection image={story.image} imageAlt={story.imageAlt} paragraphs={story.paragraphs} />
         <ReviewsSection reviews={site.reviews} />
         <BrandSection title={site.brandStory.title} paragraphs={site.brandStory.paragraphs} markdown={aboutMarkdown} />
         <ProductsSection items={products} />
