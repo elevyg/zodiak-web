@@ -29,9 +29,83 @@
   "brandStory": {
     "title": "Quiénes somos",
     "paragraphs": [
-      "Amamos viajar, la naturaleza, escalar y esquiar. Por eso diseñamos un top perfecto para que te sientas cómoda hagas lo que hagas.",
-      "Nuestros productos se producen en un pequeño taller de San Carlos de Bariloche con telas de alta calidad y enfoque artesanal.",
-      "Zodiak no es fast fashion: hacemos tandas limitadas para mantener identidad, calidad y cercanía."
+      "Zodiak nació de una necesidad muy concreta: encontrar el top perfecto para escalar. No lo encontrábamos, así que lo diseñamos. Queríamos una prenda que acompañara el movimiento real del cuerpo, que sostuviera sin incomodar y que se sintiera cómoda no solo en la pared, sino en cualquier deporte, en la montaña, en el lago o hagas lo que hagas."
+    ]
+  },
+  "reviews": {
+    "title": "Historias en movimiento",
+    "subtitle": "Voces reales. Experiencias reales.",
+    "items": [
+      {
+        "name": "Sofía",
+        "age": 34,
+        "quote": "Te soy sincera, pensé que iba a ser “uno más”. Pero lo usé todo el día, entrené, salí, volví a casa… y nunca sentí ganas de sacármelo."
+      },
+      {
+        "name": "Mica",
+        "age": 28,
+        "quote": "En mi placar ya casi no tengo otros. Sin darme cuenta terminé usando siempre los de ustedes."
+      },
+      {
+        "name": "Agustina",
+        "age": 31,
+        "quote": "Me daba miedo que no me sostenga bien. Cuando me lo probé fue tipo “ok, esto sí”. Me sentí cómoda desde el minuto uno."
+      },
+      {
+        "name": "Flor",
+        "age": 26,
+        "quote": "Compré uno para probar… y al mes volví por otro. No fue planeado."
+      },
+      {
+        "name": "Mariana",
+        "age": 30,
+        "quote": "Tengo todos los modelos 🙈 pero mi favorito es el Les Vans escote bajo. Al fin un top que no me aplasta."
+      },
+      {
+        "name": "Laura",
+        "age": 42,
+        "quote": "No tengo 20 y ya no me pongo cualquier cosa para entrenar. Este me sostiene bien y no me deja esa sensación incómoda después de un rato. Eso lo valoro mucho."
+      },
+      {
+        "name": "Verónica",
+        "age": 45,
+        "quote": "Lo uso para caminar, para entrenar suave y a veces todo el día en casa. Es cómodo de verdad, no solo al principio."
+      },
+      {
+        "name": "Julieta",
+        "age": 32,
+        "quote": "Los vuelvo a elegir porque ya sé cómo me quedan. No tengo que dudar más."
+      },
+      {
+        "name": "Emily",
+        "age": 30,
+        "quote": "I didn’t expect to love it this much. Now it’s just the one I grab without thinking."
+      },
+      {
+        "name": "Giulia",
+        "age": 29,
+        "quote": "All’inizio volevo solo provarlo. Adesso è quello che uso più spesso."
+      },
+      {
+        "name": "Anna",
+        "age": 28,
+        "quote": "Ich war unsicher… aber es sitzt einfach gut. Kein Rutschen, kein Drücken."
+      },
+      {
+        "name": "Sabine",
+        "age": 43,
+        "quote": "Ich brauche guten Halt, aber ohne Druckgefühl. Genau das habe ich hier gefunden."
+      },
+      {
+        "name": "Mara",
+        "age": 27,
+        "quote": "Hab’s meiner Freundin empfohlen… jetzt fragt sie mich, wann ich wieder bestelle 😅"
+      },
+      {
+        "name": "Cami",
+        "age": 25,
+        "quote": "Me quedó perfecto. Y eso que soy re quisquillosa con los tops."
+      }
     ]
   },
   "contact": {

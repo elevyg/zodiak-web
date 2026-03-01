@@ -24,6 +24,15 @@ export type SiteContent = {
     title: string;
     paragraphs: string[];
   };
+  reviews: {
+    title: string;
+    subtitle: string;
+    items: {
+      name: string;
+      age: number;
+      quote: string;
+    }[];
+  };
   contact: {
     title: string;
     subtitle: string;

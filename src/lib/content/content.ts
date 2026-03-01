@@ -32,6 +32,17 @@ const siteSchema = z.object({
     title: z.string(),
     paragraphs: z.array(z.string())
   }),
+  reviews: z.object({
+    title: z.string(),
+    subtitle: z.string(),
+    items: z.array(
+      z.object({
+        name: z.string(),
+        age: z.number(),
+        quote: z.string()
+      })
+    )
+  }),
   contact: z.object({
     title: z.string(),
     subtitle: z.string(),
