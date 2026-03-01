@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { AutosaveBar } from "./autosave-bar";
+import { useCallback, useState } from "react";
+import { SaveBar } from "./autosave-bar";
 import { ImageUpload } from "./image-upload";
 
 type Status = "idle" | "saving" | "saved" | "error";
@@ -51,7 +51,7 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
   const [content, setContent] = useState<unknown>(() => initialContent ?? DEFAULT_CONTENT[slug] ?? {});
   const [status, setStatus] = useState<Status>("idle");
   const [lastSaved, setLastSaved] = useState<string | null>(updatedAt ? formatTime(updatedAt) : null);
-  const initialMount = useRef(true);
+  const [dirty, setDirty] = useState(false);
 
   const save = useCallback(async () => {
     setStatus("saving");
@@ -67,6 +67,7 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
       }
       const data = await res.json();
       setLastSaved(formatTime(data.updated_at));
+      setDirty(false);
       setStatus("saved");
       setTimeout(() => setStatus("idle"), 2000);
     } catch {
@@ -74,17 +75,14 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
     }
   }, [slug, content]);
 
-  useEffect(() => {
-    if (initialMount.current) {
-      initialMount.current = false;
-      return;
-    }
-    if (status === "saving" || status === "error") return;
-    const t = setTimeout(save, 800);
-    return () => clearTimeout(t);
-  }, [content, save, status]);
+  const setContentAndDirty = useCallback((arg: unknown | ((prev: unknown) => unknown)) => {
+    setDirty(true);
+    if (typeof arg === "function") setContent(arg as (prev: unknown) => unknown);
+    else setContent(arg);
+  }, []);
 
   const update = useCallback((path: string[], value: unknown) => {
+    setDirty(true);
     setContent((prev: unknown) => {
       const next = typeof prev === "object" && prev !== null ? { ...(prev as object) } : {};
       let current: Record<string, unknown> = next as Record<string, unknown>;
@@ -101,6 +99,7 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
 
   const updateNested = useCallback(
     (path: string[], key: string, value: unknown) => {
+      setDirty(true);
       setContent((prev: unknown) => {
         const o = prev as Record<string, unknown>;
         let current: unknown = o;
@@ -124,7 +123,7 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
     const c = content as { image?: string; imageAlt?: string; paragraphs?: string[] };
     return (
       <>
-        <AutosaveBar status={status} lastSaved={lastSaved} />
+        <SaveBar status={status} lastSaved={lastSaved} dirty={dirty} onSave={save} />
         <div className="p-6 space-y-6 max-w-2xl">
           <h2 className="text-lg font-semibold">Story</h2>
           <div className="rounded border border-[var(--border)] bg-white p-4 space-y-4">
@@ -170,7 +169,7 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
     const c = content as { markdown?: string };
     return (
       <>
-        <AutosaveBar status={status} lastSaved={lastSaved} />
+        <SaveBar status={status} lastSaved={lastSaved} dirty={dirty} onSave={save} />
         <div className="p-6 space-y-6 max-w-2xl">
           <h2 className="text-lg font-semibold">About</h2>
           <div className="rounded border border-[var(--border)] bg-white p-4">
@@ -194,7 +193,7 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
     const heroCtas2 = hero.ctaSecondary as Record<string, string> | undefined;
     return (
       <>
-        <AutosaveBar status={status} lastSaved={lastSaved} />
+        <SaveBar status={status} lastSaved={lastSaved} dirty={dirty} onSave={save} />
         <div className="p-6 space-y-6 max-w-2xl">
           <h2 className="text-lg font-semibold">Site</h2>
           <div className="rounded border border-[var(--border)] bg-white p-4 space-y-4">
@@ -355,7 +354,7 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
     const items = (content as { question?: string; answer?: string }[]) ?? [];
     return (
       <>
-        <AutosaveBar status={status} lastSaved={lastSaved} />
+        <SaveBar status={status} lastSaved={lastSaved} dirty={dirty} onSave={save} />
         <div className="p-6 space-y-6 max-w-2xl">
           <h2 className="text-lg font-semibold">FAQ</h2>
           <div className="space-y-4">
@@ -368,7 +367,7 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
                   onChange={(e) => {
                     const next = [...items];
                     next[i] = { ...next[i], question: e.target.value, answer: next[i]?.answer ?? "" };
-                    setContent(next);
+                    setContentAndDirty(next);
                   }}
                   className="w-full rounded border border-[var(--border)] px-2 py-1.5 text-sm"
                 />
@@ -378,14 +377,14 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
                   onChange={(e) => {
                     const next = [...items];
                     next[i] = { ...next[i], question: next[i]?.question ?? "", answer: e.target.value };
-                    setContent(next);
+                    setContentAndDirty(next);
                   }}
                   className="w-full rounded border border-[var(--border)] px-2 py-1.5 text-sm"
                   rows={2}
                 />
                 <button
                   type="button"
-                  onClick={() => setContent(items.filter((_, j) => j !== i))}
+                  onClick={() => setContentAndDirty(items.filter((_, j) => j !== i))}
                   className="text-sm text-red-600 hover:underline"
                 >
                   Remove
@@ -394,7 +393,7 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
             ))}
             <button
               type="button"
-              onClick={() => setContent([...items, { question: "", answer: "" }])}
+              onClick={() => setContentAndDirty([...items, { question: "", answer: "" }])}
               className="text-sm text-[var(--accent)] hover:underline"
             >
               + Add FAQ
@@ -409,7 +408,7 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
     const items = (content as Array<Record<string, unknown>>) ?? [];
     return (
       <>
-        <AutosaveBar status={status} lastSaved={lastSaved} />
+        <SaveBar status={status} lastSaved={lastSaved} dirty={dirty} onSave={save} />
         <div className="p-6 space-y-6 max-w-2xl">
           <h2 className="text-lg font-semibold">Products</h2>
           <div className="space-y-4">
@@ -422,7 +421,7 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
                   onChange={(e) => {
                     const next = [...items];
                     next[i] = { ...next[i], id: e.target.value };
-                    setContent(next);
+                    setContentAndDirty(next);
                   }}
                   className="w-full rounded border border-[var(--border)] px-2 py-1.5 text-sm"
                 />
@@ -433,7 +432,7 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
                   onChange={(e) => {
                     const next = [...items];
                     next[i] = { ...next[i], name: e.target.value };
-                    setContent(next);
+                    setContentAndDirty(next);
                   }}
                   className="w-full rounded border border-[var(--border)] px-2 py-1.5 text-sm"
                 />
@@ -443,7 +442,7 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
                   onChange={(e) => {
                     const next = [...items];
                     next[i] = { ...next[i], description: e.target.value };
-                    setContent(next);
+                    setContentAndDirty(next);
                   }}
                   className="w-full rounded border border-[var(--border)] px-2 py-1.5 text-sm"
                   rows={2}
@@ -455,7 +454,7 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
                   onChange={(e) => {
                     const next = [...items];
                     next[i] = { ...next[i], composition: e.target.value };
-                    setContent(next);
+                    setContentAndDirty(next);
                   }}
                   className="w-full rounded border border-[var(--border)] px-2 py-1.5 text-sm"
                 />
@@ -467,13 +466,13 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
                     const next = [...items];
                     const imgs = e.target.value.split(",").map((s) => s.trim()).filter(Boolean);
                     next[i] = { ...next[i], images: imgs };
-                    setContent(next);
+                    setContentAndDirty(next);
                   }}
                   className="w-full rounded border border-[var(--border)] px-2 py-1.5 text-sm"
                 />
                 <button
                   type="button"
-                  onClick={() => setContent(items.filter((_, j) => j !== i))}
+                  onClick={() => setContentAndDirty(items.filter((_, j) => j !== i))}
                   className="text-sm text-red-600 hover:underline"
                 >
                   Remove product
@@ -483,7 +482,7 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
             <button
               type="button"
               onClick={() =>
-                setContent([
+                setContentAndDirty([
                   ...items,
                   { id: "", name: "", description: "", features: [], composition: "", images: [] }
                 ])
@@ -502,7 +501,7 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
     const items = (content as Array<{ src?: string; alt?: string; width?: number; height?: number; priority?: boolean }>) ?? [];
     return (
       <>
-        <AutosaveBar status={status} lastSaved={lastSaved} />
+        <SaveBar status={status} lastSaved={lastSaved} dirty={dirty} onSave={save} />
         <div className="p-6 space-y-6 max-w-2xl">
           <h2 className="text-lg font-semibold">Gallery</h2>
           <div className="space-y-4">
@@ -525,7 +524,7 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
                     onChange={(e) => {
                       const next = [...items];
                       next[i] = { ...next[i], src: e.target.value, alt: next[i]?.alt, width: next[i]?.width ?? 0, height: next[i]?.height ?? 0 };
-                      setContent(next);
+                      setContentAndDirty(next);
                     }}
                     className="w-full rounded border border-[var(--border)] px-2 py-1.5 text-sm"
                   />
@@ -536,7 +535,7 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
                     onChange={(e) => {
                       const next = [...items];
                       next[i] = { ...next[i], alt: e.target.value };
-                      setContent(next);
+                      setContentAndDirty(next);
                     }}
                     className="w-full rounded border border-[var(--border)] px-2 py-1.5 text-sm"
                   />
@@ -547,7 +546,7 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
                       onChange={(e) => {
                         const next = [...items];
                         next[i] = { ...next[i], priority: e.target.checked };
-                        setContent(next);
+                        setContentAndDirty(next);
                       }}
                     />
                     Priority
@@ -555,7 +554,7 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
                 </div>
                 <button
                   type="button"
-                  onClick={() => setContent(items.filter((_, j) => j !== i))}
+                  onClick={() => setContentAndDirty(items.filter((_, j) => j !== i))}
                   className="text-sm text-red-600 hover:underline self-start"
                 >
                   Remove
@@ -564,7 +563,7 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
             ))}
             <button
               type="button"
-              onClick={() => setContent([...items, { src: "", alt: "", width: 0, height: 0 }])}
+              onClick={() => setContentAndDirty([...items, { src: "", alt: "", width: 0, height: 0 }])}
               className="text-sm text-[var(--accent)] hover:underline"
             >
               + Add image
@@ -577,7 +576,7 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
 
   return (
     <>
-      <AutosaveBar status={status} lastSaved={lastSaved} />
+      <SaveBar status={status} lastSaved={lastSaved} dirty={dirty} onSave={save} />
       <div className="p-6">
         <p className="text-[var(--ink-muted)]">Unknown document type: {slug}</p>
       </div>

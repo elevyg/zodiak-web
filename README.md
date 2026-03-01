@@ -44,7 +44,7 @@ El contenido del sitio se edita desde un CMS protegido por contraseña.
 
 **Uso:**
 
-- Los cambios se guardan automáticamente al editar (autosave)
+- Los cambios se marcan como "Unsaved changes"; usar el botón "Save" para guardar
 - Imágenes: botón "Upload image" → se suben a Vercel Blob y se inserta la URL en el campo activo
 - Cada documento tiene su propio editor con campos específicos
 
