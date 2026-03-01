@@ -10,6 +10,7 @@ type HeaderProps = {
 
 export function Header({ nav }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => {
@@ -20,6 +21,15 @@ export function Header({ nav }: HeaderProps) {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isMenuOpen]);
 
   return (
     <header
@@ -44,9 +54,39 @@ export function Header({ nav }: HeaderProps) {
           />
           <span className="text-sm font-semibold tracking-[0.16em] text-ink md:text-base">ZODIAK</span>
         </a>
+
+        <button
+          type="button"
+          aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
+          aria-expanded={isMenuOpen}
+          onClick={() => setIsMenuOpen((value) => !value)}
+          className={`relative flex h-12 w-12 items-center justify-center rounded-2xl border md:hidden ${
+            isScrolled || isMenuOpen
+              ? "border-border bg-border text-ink"
+              : "border-[#f6ebdc8c] bg-[#f6ebdc3b] text-inverse backdrop-blur"
+          }`}
+        >
+          <span className="sr-only">Menú</span>
+          <span
+            className={`absolute h-[2px] w-6 rounded-full bg-current transition-all duration-300 ${
+              isMenuOpen ? "rotate-45" : "-translate-y-2"
+            }`}
+          />
+          <span
+            className={`absolute h-[2px] w-6 rounded-full bg-current transition-all duration-300 ${
+              isMenuOpen ? "opacity-0" : "opacity-100"
+            }`}
+          />
+          <span
+            className={`absolute h-[2px] w-6 rounded-full bg-current transition-all duration-300 ${
+              isMenuOpen ? "-rotate-45" : "translate-y-2"
+            }`}
+          />
+        </button>
+
         <nav
           aria-label="Principal"
-          className={`flex max-w-[60vw] gap-4 overflow-x-auto text-xs uppercase tracking-[0.12em] md:max-w-none md:gap-6 md:text-sm ${
+          className={`hidden max-w-[60vw] gap-4 overflow-x-auto text-xs uppercase tracking-[0.12em] md:flex md:max-w-none md:gap-6 md:text-sm ${
             isScrolled ? "text-ink" : "text-inverse"
           }`}
         >
@@ -60,6 +100,37 @@ export function Header({ nav }: HeaderProps) {
             </a>
           ))}
         </nav>
+      </div>
+
+      <div
+        className={`md:hidden ${
+          isMenuOpen ? "pointer-events-auto" : "pointer-events-none"
+        } absolute left-0 right-0 top-full px-4 transition-all duration-500`}
+      >
+        <div
+          className={`mx-auto w-full max-w-[min(1100px,calc(100%-2rem))] origin-top rounded-3xl border border-border bg-bg/95 p-3 shadow-[0_18px_40px_rgba(28,28,28,0.16)] backdrop-blur-md transition-all duration-500 ${
+            isMenuOpen ? "translate-y-2 scale-y-100 opacity-100" : "-translate-y-4 scale-y-95 opacity-0"
+          }`}
+        >
+          <nav aria-label="Menú móvil" className="grid gap-1 text-sm uppercase tracking-[0.14em] text-ink">
+            {nav.map((item, index) => (
+              <a
+                key={item.href}
+                href={item.href}
+                onClick={() => setIsMenuOpen(false)}
+                className={`rounded-2xl px-4 py-3 transition hover:bg-surface hover:text-accentStrong ${
+                  isMenuOpen ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
+                }`}
+                style={{
+                  transitionDuration: "380ms",
+                  transitionDelay: `${isMenuOpen ? 90 + index * 70 : 0}ms`
+                }}
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+        </div>
       </div>
     </header>
   );
