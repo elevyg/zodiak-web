@@ -14,7 +14,7 @@ Copia `.env.example` a `.env` y completa:
 - `TURSO_URL`, `TURSO_TOKEN`: base de datos Turso
 - `ADMIN_PASSWORD`: contraseña para acceder al CMS
 - `ADMIN_SESSION_SECRET`: mínimo 32 caracteres aleatorios (firma de sesión)
-- `BLOB_READ_WRITE_TOKEN`: token de Vercel Blob para subida de imágenes
+- `UPLOADTHING_TOKEN`: token de UploadThing para subida de imágenes
 
 ## Desarrollo
 
@@ -45,7 +45,15 @@ El contenido del sitio se edita desde un CMS protegido por contraseña.
 **Uso:**
 
 - Los cambios se marcan como "Unsaved changes"; usar el botón "Save" para guardar
-- Imágenes: botón "Upload image" → se suben a Vercel Blob y se inserta la URL en el campo activo
+- Imágenes: botón "Upload image" → se suben a UploadThing y se inserta la URL en el campo activo
+
+### Migrar imágenes existentes a UploadThing
+
+```bash
+npm run upload-images
+```
+
+Sube todas las imágenes de `public/images/` a UploadThing y escribe el mapeo (path → URL) en `scripts/upload-mapping.json`. Usa ese mapeo para actualizar el contenido en el CMS con las nuevas URLs.
 - Cada documento tiene su propio editor con campos específicos
 
 **Nota:** El área `/admin` no se indexa en buscadores (robots.txt).

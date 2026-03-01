@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
+import { useUploadThing } from "@/utils/uploadthing";
 
 type ImageUploadProps = {
   value: string;
@@ -11,22 +12,17 @@ type ImageUploadProps = {
 
 export function ImageUpload({ value, onChange, alt, onAltChange }: ImageUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [uploading, setUploading] = useState(false);
+  const { startUpload, isUploading } = useUploadThing("imageUploader", {
+    onClientUploadComplete: (res) => {
+      if (res?.[0]?.url) onChange(res[0].url);
+    }
+  });
 
-  async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    setUploading(true);
-    try {
-      const form = new FormData();
-      form.set("file", file);
-      const res = await fetch("/api/admin/upload", { method: "POST", body: form });
-      const data = await res.json();
-      if (res.ok && data.url) onChange(data.url);
-    } finally {
-      setUploading(false);
-      e.target.value = "";
-    }
+    startUpload([file]);
+    e.target.value = "";
   }
 
   return (
@@ -38,14 +34,14 @@ export function ImageUpload({ value, onChange, alt, onAltChange }: ImageUploadPr
           accept="image/*"
           className="hidden"
           onChange={handleFile}
-          disabled={uploading}
+          disabled={isUploading}
         />
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          className="rounded border border-[var(--border)] px-3 py-1.5 text-sm hover:bg-[var(--surface-strong)]"
+          className="rounded border border-[var(--border)] px-3 py-1.5 text-sm hover:bg-[var(--surface-strong)] disabled:opacity-50"
         >
-          {uploading ? "Uploading…" : "Upload image"}
+          {isUploading ? "Uploading…" : "Upload image"}
         </button>
       </div>
       {value && (

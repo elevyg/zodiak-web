@@ -7,7 +7,8 @@ export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const isAdmin = path.startsWith("/admin");
   const isAdminApi = path.startsWith("/api/admin");
-  if (!isAdmin && !isAdminApi) return NextResponse.next();
+  const isUploadThing = path.startsWith("/api/uploadthing");
+  if (!isAdmin && !isAdminApi && !isUploadThing) return NextResponse.next();
 
   if (path === "/admin/login" || (path === "/api/admin/login" && request.method === "POST")) {
     return NextResponse.next();
@@ -21,7 +22,7 @@ export async function middleware(request: NextRequest) {
     return res;
   }
 
-  if (isAdminApi) {
+  if (isAdminApi || isUploadThing) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const loginUrl = new URL("/admin/login", request.url);
@@ -30,5 +31,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/admin/:path*"]
+  matcher: ["/admin/:path*", "/api/admin/:path*", "/api/uploadthing/:path*"]
 };

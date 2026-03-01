@@ -8,4 +8,5 @@ yarn-error.log*
 pnpm-debug.log*
 
 .env
+scripts/upload-mapping.json
 .cursor
