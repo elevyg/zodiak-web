@@ -5,14 +5,18 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        bg: "var(--bg)",
+        surface: "var(--surface)",
+        surfaceStrong: "var(--surface-strong)",
+        accent: "var(--accent)",
+        accentStrong: "var(--accent-strong)",
         ink: "var(--ink)",
-        clay: "var(--clay)",
-        sand: "var(--sand)",
-        cream: "var(--cream)",
-        moss: "var(--moss)"
+        inkMuted: "var(--ink-muted)",
+        border: "var(--border)",
+        inverse: "var(--inverse)"
       },
       boxShadow: {
-        card: "0 20px 40px rgba(35, 24, 21, 0.12)"
+        card: "0 20px 40px rgba(28, 28, 28, 0.12)"
       }
     }
   },

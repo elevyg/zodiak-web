@@ -43,7 +43,7 @@ export default async function HomePage() {
         <FAQSection items={faq} />
         <ContactSection contact={site.contact} instagram={site.social.instagram} />
       </main>
-      <footer className="container-shell border-t border-black/15 py-8 text-xs uppercase tracking-[0.12em] text-ink/60">
+      <footer className="container-shell border-t border-border py-8 text-xs uppercase tracking-[0.12em] text-inkMuted">
         © {new Date().getFullYear()} Zodiak. Hecho en Patagonia.
       </footer>
     </>

@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Work_Sans } from "next/font/google";
+import { PT_Sans, Rock_Salt } from "next/font/google";
 import "./globals.css";
 
-const cormorant = Cormorant_Garamond({
+const rockSalt = Rock_Salt({
   subsets: ["latin"],
   variable: "--font-display",
-  weight: ["500", "600", "700"]
+  weight: "400"
 });
 
-const workSans = Work_Sans({
+const ptSans = PT_Sans({
   subsets: ["latin"],
   variable: "--font-body",
-  weight: ["400", "500", "600"]
+  style: ["normal", "italic"],
+  weight: ["400", "700"]
 });
 
 export const metadata: Metadata = {
@@ -26,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`${cormorant.variable} ${workSans.variable}`}>
+    <html lang="es" className={`${rockSalt.variable} ${ptSans.variable}`}>
       <body style={{ fontFamily: "var(--font-body)" }}>{children}</body>
     </html>
   );

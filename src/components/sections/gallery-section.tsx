@@ -11,7 +11,7 @@ export function GallerySection({ items }: GallerySectionProps) {
       <h2 className="mb-8 text-3xl font-semibold md:text-5xl">Galería</h2>
       <div className="columns-1 gap-4 sm:columns-2 md:columns-3">
         {items.map((item) => (
-          <figure key={item.src} className="mb-4 break-inside-avoid overflow-hidden rounded-2xl border border-black/10">
+          <figure key={item.src} className="mb-4 break-inside-avoid overflow-hidden rounded-2xl border border-border bg-surface">
             <Image
               src={item.src}
               alt={item.alt}

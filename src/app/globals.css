@@ -3,11 +3,19 @@
 @tailwind utilities;
 
 :root {
-  --ink: #2e2220;
-  --clay: #8d4f40;
-  --sand: #d7b89f;
-  --cream: #f8f2ea;
-  --moss: #47593f;
+  --color-bg: #f6ebdc;
+  --color-accent: #f4a054;
+  --color-ink: #1c1c1c;
+
+  --bg: var(--color-bg);
+  --surface: #fbf4ea;
+  --surface-strong: #f2e4d2;
+  --accent: var(--color-accent);
+  --accent-strong: #dc8d46;
+  --ink: var(--color-ink);
+  --ink-muted: #4a4a4a;
+  --border: #d9c9b4;
+  --inverse: #fffdf9;
 }
 
 * {
@@ -22,9 +30,9 @@ body {
   margin: 0;
   color: var(--ink);
   background:
-    radial-gradient(circle at 15% 20%, rgba(141, 79, 64, 0.15), transparent 40%),
-    radial-gradient(circle at 80% 10%, rgba(71, 89, 63, 0.12), transparent 35%),
-    linear-gradient(180deg, #f9f4ee 0%, #f5ede4 50%, #efe2d3 100%);
+    radial-gradient(circle at 16% 18%, rgba(244, 160, 84, 0.24), transparent 42%),
+    radial-gradient(circle at 84% 12%, rgba(28, 28, 28, 0.07), transparent 35%),
+    linear-gradient(180deg, var(--bg) 0%, #f8eddc 52%, #f3e6d5 100%);
   min-height: 100vh;
 }
 
@@ -33,15 +41,15 @@ body::before {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  opacity: 0.08;
-  background-image: radial-gradient(#2e2220 0.4px, transparent 0.4px);
+  opacity: 0.07;
+  background-image: radial-gradient(var(--ink) 0.4px, transparent 0.4px);
   background-size: 5px 5px;
 }
 
 h1,
 h2,
 h3 {
-  font-family: var(--font-display), serif;
+  font-family: var(--font-display), sans-serif;
   letter-spacing: 0.01em;
 }
 
