@@ -1,0 +1,67 @@
+[
+  {
+    "id": "top-les-vans-algodon",
+    "name": "Top \"Les Vans\" de algodón",
+    "description": "Para quienes prefieren texturas naturales, suave al tacto y cómodo todo el día.",
+    "features": [
+      "Sensación muy cómoda",
+      "Totalmente reversible",
+      "Se amolda al cuerpo",
+      "Sin costuras molestas"
+    ],
+    "composition": "Composición: 96% algodón / 4% lycra",
+    "images": ["/images/producto-top-algodon-01.jpg"]
+  },
+  {
+    "id": "top-les-vans-lycra",
+    "name": "Top \"Les Vans\" lycra",
+    "description": "Ideal para actividades al aire libre, secado rápido y dos tipos de escote.",
+    "features": [
+      "Tan cómodo que te olvidás que lo tenés puesto",
+      "Escote alto o bajo",
+      "Perfecto para nadar",
+      "Colores vibrantes"
+    ],
+    "composition": "Composición: 88% nylon / 12% lycra",
+    "images": ["/images/producto-top-lycra-01.jpg"],
+    "badge": "Más pedido"
+  },
+  {
+    "id": "musculosa-les-vans",
+    "name": "Musculosa \"Les Vans\"",
+    "description": "Versión musculosa del top Les Vans, extra larga para mayor seguridad con arnés.",
+    "features": [
+      "Con top incorporado",
+      "Lisas o combinadas",
+      "Ideal para escalar",
+      "Diseño minimalista"
+    ],
+    "composition": "Composición: 96% algodón / 4% lycra",
+    "images": ["/images/producto-musculosa-01.jpg"]
+  },
+  {
+    "id": "bikini-bottom",
+    "name": "Bikini bottom",
+    "description": "Tres tipos de bikini bottom para combinar con tu top Les Vans.",
+    "features": [
+      "Corte deportivo",
+      "Lycra extralife",
+      "Ajuste cómodo"
+    ],
+    "composition": "Composición: 88% nylon / 12% lycra",
+    "images": ["/images/producto-bikini-bottom-01.jpg"]
+  },
+  {
+    "id": "ediciones-especiales",
+    "name": "Ediciones especiales",
+    "description": "Vestidos o pantalones en cápsulas ocasionales de muy baja tirada.",
+    "features": [
+      "Series limitadas",
+      "Experimentación de color y corte",
+      "Disponibilidad variable"
+    ],
+    "composition": "Composición variable según prenda",
+    "images": ["/images/producto-edicion-especial-01.jpg"],
+    "badge": "Limitado"
+  }
+]

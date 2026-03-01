@@ -1,0 +1,39 @@
+[
+  {
+    "src": "/images/galeria-01.jpg",
+    "alt": "Top deportivo Zodiak en exterior de montaña",
+    "width": 2370,
+    "height": 1150,
+    "priority": true
+  },
+  {
+    "src": "/images/galeria-02.jpg",
+    "alt": "Detalle de textura y confección de top Les Vans",
+    "width": 2370,
+    "height": 960
+  },
+  {
+    "src": "/images/galeria-03.jpg",
+    "alt": "Escalada en roca con prenda Zodiak",
+    "width": 1316,
+    "height": 1440
+  },
+  {
+    "src": "/images/galeria-04.jpg",
+    "alt": "Combinaciones de color de tops Zodiak",
+    "width": 1316,
+    "height": 680
+  },
+  {
+    "src": "/images/galeria-05.jpg",
+    "alt": "Lifestyle outdoors con indumentaria Zodiak",
+    "width": 1316,
+    "height": 1440
+  },
+  {
+    "src": "/images/galeria-06.jpg",
+    "alt": "Prenda Zodiak en entorno patagónico",
+    "width": 1316,
+    "height": 1440
+  }
+]

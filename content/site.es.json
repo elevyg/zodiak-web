@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "Zodiak Climb | Indumentaria artesanal para escaladoras",
+    "description": "Zodiak Climb crea indumentaria artesanal para mujeres escaladoras. Ediciones limitadas hechas en Patagonia.",
+    "ogTitle": "Zodiak Climb",
+    "ogDescription": "Top Les Vans y prendas exclusivas hechas a mano en San Carlos de Bariloche."
+  },
+  "nav": [
+    { "label": "Inicio", "href": "#hero" },
+    { "label": "Marca", "href": "#marca" },
+    { "label": "Productos", "href": "#productos" },
+    { "label": "FAQ", "href": "#faq" },
+    { "label": "Contacto", "href": "#contacto" }
+  ],
+  "hero": {
+    "eyebrow": "Hecho a mano en Patagonia",
+    "title": "La revolución en tops deportivos para mujeres que escalan",
+    "subtitle": "Diseñamos prendas cómodas, reversibles y minimalistas para moverte en roca, montaña, yoga, agua o nieve. Ediciones limitadas, sin complicaciones.",
+    "ctaPrimary": {
+      "label": "Ver productos",
+      "href": "#productos"
+    },
+    "ctaSecondary": {
+      "label": "Escribir por WhatsApp",
+      "href": "https://wa.me/5492944606083?text=Hola%20Zodiak%2C%20quiero%20conocer%20sus%20productos"
+    },
+    "image": "/images/hero-les-vans.jpg",
+    "imageAlt": "Mujer escaladora usando top Zodiak en roca"
+  },
+  "brandStory": {
+    "title": "Exclusiva, funcional y real",
+    "paragraphs": [
+      "Amamos viajar, la naturaleza, escalar y esquiar. Por eso diseñamos un top perfecto para que te sientas cómoda hagas lo que hagas.",
+      "Nuestros productos se producen en un pequeño taller de San Carlos de Bariloche con telas de alta calidad y enfoque artesanal.",
+      "Zodiak no es fast fashion: hacemos tandas limitadas para mantener identidad, calidad y cercanía."
+    ]
+  },
+  "contact": {
+    "title": "Queremos conocerte",
+    "subtitle": "Contacto directo",
+    "location": "San Carlos de Bariloche, Río Negro, Argentina. Atención con cita previa.",
+    "phone": "+54 9 2944 606083",
+    "whatsappLink": "https://wa.me/5492944606083?text=Hola%20Zodiak%2C%20quiero%20coordinar%20una%20visita"
+  },
+  "social": {
+    "instagram": "https://www.instagram.com/zodiak_climb/?hl=es-la"
+  }
+}
