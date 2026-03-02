@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
+
+export type Locale = "es" | "en";
 
 async function logout() {
   await fetch("/api/admin/logout", { method: "POST" });
@@ -17,25 +19,20 @@ const PAGES: { slug: string; label: string }[] = [
   { slug: "about", label: "About" }
 ];
 
-const LOCALES = [
+const LOCALES: { value: Locale; label: string }[] = [
   { value: "es", label: "Español" },
   { value: "en", label: "English" }
-] as const;
+];
 
-export function AdminShell({ children }: { children: React.ReactNode }) {
+type AdminShellProps = {
+  locale: Locale;
+  children: React.ReactNode;
+};
+
+export function AdminShell({ locale, children }: AdminShellProps) {
   const pathname = usePathname();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const currentLocale = searchParams.get("locale") === "en" ? "en" : "es";
 
-  if (pathname === "/admin/login") return <>{children}</>;
-
-  const docHref = (slug: string) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("locale", currentLocale);
-    const q = params.toString();
-    return `/admin/${slug}${q ? `?${q}` : ""}`;
-  };
+  const docHref = (slug: string) => `/admin/${slug}?locale=${locale}`;
 
   return (
     <div className="flex min-h-screen bg-[var(--surface)]">
@@ -46,12 +43,11 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         <div className="mb-4">
           <label className="block text-xs font-medium text-[var(--ink-muted)] mb-1">Locale</label>
           <select
-            value={currentLocale}
+            value={locale}
             onChange={(e) => {
-              const params = new URLSearchParams(searchParams);
-              params.set("locale", e.target.value);
+              const newLocale = e.target.value as Locale;
               const slug = pathname.replace(/^\/admin\/?/, "") || "site";
-              router.push(`/admin/${slug}?${params.toString()}`);
+              window.location.href = `/admin/${slug}?locale=${newLocale}`;
             }}
             className="w-full rounded border border-[var(--border)] bg-white px-3 py-2 text-sm text-[var(--ink)]"
           >

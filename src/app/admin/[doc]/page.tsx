@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getDocumentBySlug, type Locale } from "@/lib/content/repository";
 import { CMS_SLUGS } from "@/lib/content/schemas";
 import { DocumentEditor } from "@/components/admin/document-editor";
+import { AdminShell } from "@/components/admin/admin-shell";
 
 type PageProps = {
   params: Promise<{ doc: string }>;
@@ -22,12 +23,14 @@ export default async function AdminDocPage({ params, searchParams }: PageProps) 
   const version = row?.version ?? 0;
   const updatedAt = row?.updated_at ?? null;
   return (
-    <DocumentEditor
-      slug={slug}
-      locale={locale}
-      initialContent={content}
-      version={version}
-      updatedAt={updatedAt}
-    />
+    <AdminShell locale={locale}>
+      <DocumentEditor
+        slug={slug}
+        locale={locale}
+        initialContent={content}
+        version={version}
+        updatedAt={updatedAt}
+      />
+    </AdminShell>
   );
 }

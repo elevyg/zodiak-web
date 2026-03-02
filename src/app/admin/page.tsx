@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
 export default function AdminPage() {
-  redirect("/admin/site");
+  redirect("/admin/site?locale=es");
 }
