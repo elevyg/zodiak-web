@@ -53,27 +53,32 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
   const [lastSaved, setLastSaved] = useState<string | null>(updatedAt ? formatTime(updatedAt) : null);
   const [dirty, setDirty] = useState(false);
 
-  const save = useCallback(async () => {
-    setStatus("saving");
-    try {
-      const res = await fetch(`/api/admin/documents/${slug}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(content)
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error ?? "Save failed");
+  const save = useCallback(
+    async (overrideContent?: unknown) => {
+      const toSave = overrideContent !== undefined ? overrideContent : content;
+      setStatus("saving");
+      try {
+        const res = await fetch(`/api/admin/documents/${slug}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(toSave)
+        });
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error ?? "Save failed");
+        }
+        const data = await res.json();
+        setContent(data.content);
+        setLastSaved(formatTime(data.updated_at));
+        setDirty(false);
+        setStatus("saved");
+        setTimeout(() => setStatus("idle"), 2000);
+      } catch {
+        setStatus("error");
       }
-      const data = await res.json();
-      setLastSaved(formatTime(data.updated_at));
-      setDirty(false);
-      setStatus("saved");
-      setTimeout(() => setStatus("idle"), 2000);
-    } catch {
-      setStatus("error");
-    }
-  }, [slug, content]);
+    },
+    [slug, content]
+  );
 
   const setContentAndDirty = useCallback((arg: unknown | ((prev: unknown) => unknown)) => {
     setDirty(true);
@@ -460,41 +465,75 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
                 />
                 <div>
                   <label className="block text-sm text-[var(--ink-muted)] mb-1">Images</label>
-                  {(Array.isArray(item?.images) ? (item.images as string[]) : []).map((img, j) => (
-                    <div key={j} className="flex items-center gap-2 mb-2">
-                      <ImageUpload
-                        value={img}
-                        onChange={(url) => {
-                          const next = [...items];
-                          const imgs = [...(next[i].images as string[])];
-                          imgs[j] = url;
-                          next[i] = { ...next[i], images: imgs };
-                          setContentAndDirty(next);
-                        }}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const next = [...items];
-                          const imgs = (next[i].images as string[]).filter((_, k) => k !== j);
-                          next[i] = { ...next[i], images: imgs };
-                          setContentAndDirty(next);
-                        }}
-                        className="text-sm text-red-600 hover:underline shrink-0"
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  ))}
-                  <ImageUpload
-                    value=""
-                    onChange={(url) => {
-                      const next = [...items];
-                      const imgs = [...(Array.isArray(next[i].images) ? (next[i].images as string[]) : []), url];
-                      next[i] = { ...next[i], images: imgs };
-                      setContentAndDirty(next);
-                    }}
-                  />
+                  <div className="flex flex-wrap gap-3 items-start">
+                    {(Array.isArray(item?.images) ? (item.images as string[]) : []).map((img, j) => (
+                      <div key={j} className="flex flex-col gap-2">
+                        <div className="flex items-start gap-2">
+                          <ImageUpload
+                            value={img}
+                            buttonLabel="Replace"
+                            onChange={(url) => {
+                              setContentAndDirty((prev: unknown) => {
+                                const arr = (prev as Array<Record<string, unknown>>) ?? [];
+                                const next = arr.map((it, idx) =>
+                                  idx === i
+                                    ? {
+                                        ...it,
+                                        images: (Array.isArray(it.images) ? [...(it.images as string[])] : []).map(
+                                          (u, k) => (k === j ? url : u)
+                                        )
+                                      }
+                                    : it
+                                );
+                                save(next);
+                                return next;
+                              });
+                            }}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setContentAndDirty((prev: unknown) => {
+                                const arr = (prev as Array<Record<string, unknown>>) ?? [];
+                                return arr.map((it, idx) =>
+                                  idx === i
+                                    ? {
+                                        ...it,
+                                        images: (Array.isArray(it.images) ? (it.images as string[]) : []).filter(
+                                          (_, k) => k !== j
+                                        )
+                                      }
+                                    : it
+                                );
+                              });
+                            }}
+                            className="text-sm text-red-600 hover:underline shrink-0"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                    <ImageUpload
+                      value=""
+                      buttonLabel="Add image"
+                      onChange={(url) => {
+                        setContentAndDirty((prev: unknown) => {
+                          const arr = (prev as Array<Record<string, unknown>>) ?? [];
+                          const next = arr.map((it, idx) =>
+                            idx === i
+                              ? {
+                                  ...it,
+                                  images: [...(Array.isArray(it.images) ? (it.images as string[]) : []), url]
+                                }
+                              : it
+                          );
+                          save(next);
+                          return next;
+                        });
+                      }}
+                    />
+                  </div>
                 </div>
                 <button
                   type="button"
@@ -546,15 +585,19 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
                   <ImageUpload
                     value={item?.src ?? ""}
                     onChange={(url) => {
-                      const next = [...items];
-                      next[i] = { ...next[i], src: url };
-                      setContentAndDirty(next);
+                      setContentAndDirty((prev: unknown) => {
+                        const arr = (prev as Array<Record<string, unknown>>) ?? [];
+                        const next = arr.map((it, idx) => (idx === i ? { ...it, src: url } : it));
+                        save(next);
+                        return next;
+                      });
                     }}
                     alt={item?.alt}
                     onAltChange={(v) => {
-                      const next = [...items];
-                      next[i] = { ...next[i], alt: v };
-                      setContentAndDirty(next);
+                      setContentAndDirty((prev: unknown) => {
+                        const arr = (prev as Array<Record<string, unknown>>) ?? [];
+                        return arr.map((it, idx) => (idx === i ? { ...it, alt: v } : it));
+                      });
                     }}
                   />
                   <label className="flex items-center gap-2 text-sm">
@@ -562,9 +605,10 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
                       type="checkbox"
                       checked={item?.priority ?? false}
                       onChange={(e) => {
-                        const next = [...items];
-                        next[i] = { ...next[i], priority: e.target.checked };
-                        setContentAndDirty(next);
+                        setContentAndDirty((prev: unknown) => {
+                          const arr = (prev as Array<Record<string, unknown>>) ?? [];
+                          return arr.map((it, idx) => (idx === i ? { ...it, priority: e.target.checked } : it));
+                        });
                       }}
                     />
                     Priority

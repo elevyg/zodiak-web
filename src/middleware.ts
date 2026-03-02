@@ -14,6 +14,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  if (isUploadThing) return NextResponse.next();
+
   const cookieHeader = request.headers.get("cookie");
   const session = await getSessionFromCookie(cookieHeader);
   if (session) {
@@ -22,7 +24,7 @@ export async function middleware(request: NextRequest) {
     return res;
   }
 
-  if (isAdminApi || isUploadThing) {
+  if (isAdminApi) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const loginUrl = new URL("/admin/login", request.url);

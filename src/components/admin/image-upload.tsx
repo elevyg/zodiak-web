@@ -8,13 +8,18 @@ type ImageUploadProps = {
   onChange: (url: string) => void;
   alt?: string;
   onAltChange?: (alt: string) => void;
+  buttonLabel?: string;
 };
 
-export function ImageUpload({ value, onChange, alt, onAltChange }: ImageUploadProps) {
+export function ImageUpload({ value, onChange, alt, onAltChange, buttonLabel }: ImageUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
   const { startUpload, isUploading } = useUploadThing("imageUploader", {
     onClientUploadComplete: (res) => {
-      if (res?.[0]?.url) onChange(res[0].url);
+      const file = res?.[0];
+      const url = file?.url;
+      if (url) onChangeRef.current(url);
     }
   });
 
@@ -41,7 +46,7 @@ export function ImageUpload({ value, onChange, alt, onAltChange }: ImageUploadPr
           onClick={() => inputRef.current?.click()}
           className="rounded border border-[var(--border)] px-3 py-1.5 text-sm hover:bg-[var(--surface-strong)] disabled:opacity-50"
         >
-          {isUploading ? "Uploading…" : "Upload image"}
+          {isUploading ? "Uploading…" : (buttonLabel ?? "Upload image")}
         </button>
       </div>
       {value && (
