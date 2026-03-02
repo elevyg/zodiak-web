@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { getDocumentBySlug, upsertDocument } from "@/lib/content/repository";
+import { getDocumentBySlug, upsertDocument, type Locale } from "@/lib/content/repository";
 import { DOCUMENT_SCHEMAS, CMS_SLUGS } from "@/lib/content/schemas";
+
+function parseLocale(value: string | null): Locale {
+  if (value === "es" || value === "en") return value;
+  return "es";
+}
 
 const SLUG_TITLES: Record<string, string> = {
   site: "Site",
@@ -12,16 +17,18 @@ const SLUG_TITLES: Record<string, string> = {
   story: "Story"
 };
 
-export async function GET(_request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   if (!(CMS_SLUGS as readonly string[]).includes(slug)) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
-  const row = await getDocumentBySlug(slug);
+  const locale = parseLocale(request.nextUrl.searchParams.get("locale"));
+  const row = await getDocumentBySlug(slug, locale);
   if (!row) return NextResponse.json({ error: "Not found" }, { status: 404 });
   const content = JSON.parse(row.content_json);
   return NextResponse.json({
     slug: row.slug,
+    locale: row.locale,
     title: row.title,
     content,
     version: row.version,
@@ -34,6 +41,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
   if (!(CMS_SLUGS as readonly string[]).includes(slug)) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
+  const locale = parseLocale(request.nextUrl.searchParams.get("locale"));
   const origin = request.headers.get("origin");
   const referer = request.headers.get("referer");
   if (request.method === "PUT" && origin && referer) {
@@ -51,10 +59,12 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     return NextResponse.json({ error: "Validation failed", details: parsed.error.flatten() }, { status: 400 });
   }
   const title = SLUG_TITLES[slug] ?? slug;
-  const row = await upsertDocument(slug, title, JSON.stringify(parsed.data));
-  revalidatePath("/");
+  const row = await upsertDocument(slug, locale, title, JSON.stringify(parsed.data));
+  revalidatePath("/es");
+  revalidatePath("/en");
   return NextResponse.json({
     slug: row.slug,
+    locale: row.locale,
     title: row.title,
     content: JSON.parse(row.content_json),
     version: row.version,

@@ -49,14 +49,15 @@ async function seed() {
     { slug: "story", content: story }
   ];
 
+  const locale = "es";
   for (const { slug, content } of docs) {
-    const existing = await getDocumentBySlug(slug);
+    const existing = await getDocumentBySlug(slug, locale);
     if (existing) {
       console.log(`Skip ${slug} (already exists)`);
       continue;
     }
     const title = TITLES[slug] ?? slug;
-    await upsertDocument(slug, title, JSON.stringify(content));
+    await upsertDocument(slug, locale, title, JSON.stringify(content));
     console.log(`Seeded ${slug}`);
   }
   console.log("Seed complete.");

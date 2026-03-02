@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 async function logout() {
   await fetch("/api/admin/logout", { method: "POST" });
@@ -17,9 +17,25 @@ const PAGES: { slug: string; label: string }[] = [
   { slug: "about", label: "About" }
 ];
 
+const LOCALES = [
+  { value: "es", label: "Español" },
+  { value: "en", label: "English" }
+] as const;
+
 export function AdminShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const currentLocale = searchParams.get("locale") === "en" ? "en" : "es";
+
   if (pathname === "/admin/login") return <>{children}</>;
+
+  const docHref = (slug: string) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("locale", currentLocale);
+    const q = params.toString();
+    return `/admin/${slug}${q ? `?${q}` : ""}`;
+  };
 
   return (
     <div className="flex min-h-screen bg-[var(--surface)]">
@@ -27,10 +43,29 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         <Link href="/admin" className="block text-lg font-semibold text-[var(--ink)] mb-6">
           Zodiak CMS
         </Link>
+        <div className="mb-4">
+          <label className="block text-xs font-medium text-[var(--ink-muted)] mb-1">Locale</label>
+          <select
+            value={currentLocale}
+            onChange={(e) => {
+              const params = new URLSearchParams(searchParams);
+              params.set("locale", e.target.value);
+              const slug = pathname.replace(/^\/admin\/?/, "") || "site";
+              router.push(`/admin/${slug}?${params.toString()}`);
+            }}
+            className="w-full rounded border border-[var(--border)] bg-white px-3 py-2 text-sm text-[var(--ink)]"
+          >
+            {LOCALES.map(({ value, label }) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </div>
         <nav className="flex flex-col gap-1">
           {PAGES.map(({ slug, label }) => {
-            const href = `/admin/${slug}`;
-            const active = pathname === href;
+            const href = docHref(slug);
+            const active = pathname === `/admin/${slug}`;
             return (
               <Link
                 key={slug}

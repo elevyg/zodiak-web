@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { BrandSection } from "@/components/sections/brand-section";
 import { ContactSection } from "@/components/sections/contact-section";
 import { FAQSection } from "@/components/sections/faq-section";
@@ -10,34 +11,48 @@ import { ReviewsSection } from "@/components/sections/reviews-section";
 import { StorySection } from "@/components/sections/story-section";
 import { getAboutMarkdown, getFaq, getGallery, getProducts, getSiteContent, getStoryContent } from "@/lib/content/content";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const site = await getSiteContent("es");
+type Props = { params: Promise<{ locale: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const site = await getSiteContent(locale as "es" | "en");
+  const baseUrl = "https://zodiak-web.vercel.app";
 
   return {
     title: site.meta.title,
     description: site.meta.description,
+    alternates: {
+      canonical: `${baseUrl}/${locale}`,
+      languages: { es: `${baseUrl}/es`, en: `${baseUrl}/en` }
+    },
     openGraph: {
       title: site.meta.ogTitle,
       description: site.meta.ogDescription,
-      locale: "es_AR",
-      type: "website"
+      locale: locale === "es" ? "es_AR" : "en_US",
+      type: "website",
+      url: `${baseUrl}/${locale}`
     }
   };
 }
 
-export default async function HomePage() {
+export default async function HomePage({ params }: Props) {
+  const { locale } = await params;
+  const loc = locale as "es" | "en";
+
   const [site, products, faq, gallery, aboutMarkdown, story] = await Promise.all([
-    getSiteContent("es"),
-    getProducts("es"),
-    getFaq("es"),
-    getGallery(),
-    getAboutMarkdown(),
-    getStoryContent()
+    getSiteContent(loc),
+    getProducts(loc),
+    getFaq(loc),
+    getGallery(loc),
+    getAboutMarkdown(loc),
+    getStoryContent(loc)
   ]);
+
+  const t = await getTranslations("footer");
 
   return (
     <>
-      <Header nav={site.nav} />
+      <Header nav={site.nav} locale={loc} />
       <main>
         <HeroSection hero={site.hero} instagram={site.social.instagram} />
         <StorySection image={story.image} imageAlt={story.imageAlt} paragraphs={story.paragraphs} />
@@ -49,7 +64,7 @@ export default async function HomePage() {
         <ContactSection contact={site.contact} instagram={site.social.instagram} />
       </main>
       <footer className="container-shell border-t border-border py-8 text-xs uppercase tracking-[0.12em] text-inkMuted">
-        © {new Date().getFullYear()} Zodiak. Hecho en Patagonia.
+        © {new Date().getFullYear()} Zodiak. {t("madeIn")}
       </footer>
     </>
   );

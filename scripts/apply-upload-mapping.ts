@@ -1,7 +1,9 @@
 import "dotenv/config";
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
-import { getDocumentBySlug, upsertDocument } from "../src/lib/content/repository";
+import { getDocumentBySlug, upsertDocument, type Locale } from "../src/lib/content/repository";
+
+const LOCALES: Locale[] = ["es", "en"];
 
 const SLUG_TITLES: Record<string, string> = {
   site: "Site",
@@ -40,16 +42,18 @@ async function main() {
   const mapping = JSON.parse(readFileSync(mappingPath, "utf-8")) as Record<string, string>;
 
   for (const slug of DOCS_WITH_IMAGES) {
-    const row = await getDocumentBySlug(slug);
-    if (!row) {
-      console.log(`Skip ${slug} (not found)`);
-      continue;
+    for (const locale of LOCALES) {
+      const row = await getDocumentBySlug(slug, locale);
+      if (!row) {
+        console.log(`Skip ${slug} (${locale}) (not found)`);
+        continue;
+      }
+      const content = JSON.parse(row.content_json);
+      const updated = replaceUrls(content, mapping);
+      const title = SLUG_TITLES[slug] ?? slug;
+      await upsertDocument(slug, locale, title, JSON.stringify(updated), "migration");
+      console.log(`Updated ${slug} (${locale})`);
     }
-    const content = JSON.parse(row.content_json);
-    const updated = replaceUrls(content, mapping);
-    const title = SLUG_TITLES[slug] ?? slug;
-    await upsertDocument(slug, title, JSON.stringify(updated), "migration");
-    console.log(`Updated ${slug}`);
   }
   console.log("Done.");
 }

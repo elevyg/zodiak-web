@@ -1,0 +1,67 @@
+[
+  {
+    "id": "top-les-vans-algodon",
+    "name": "Les Vans cotton top",
+    "description": "For those who prefer natural textures, soft to the touch and comfortable all day.",
+    "features": [
+      "Very comfortable feel",
+      "Fully reversible",
+      "Moulds to your body",
+      "No annoying seams"
+    ],
+    "composition": "Composition: 96% cotton / 4% lycra",
+    "images": ["/images/producto-top-algodon-01.jpg"]
+  },
+  {
+    "id": "top-les-vans-lycra",
+    "name": "Les Vans lycra top",
+    "description": "Ideal for outdoor activities, quick-dry and two neckline options.",
+    "features": [
+      "So comfortable you forget you're wearing it",
+      "High or low neckline",
+      "Perfect for swimming",
+      "Vibrant colours"
+    ],
+    "composition": "Composition: 88% nylon / 12% lycra",
+    "images": ["/images/producto-top-lycra-01.jpg"],
+    "badge": "Best seller"
+  },
+  {
+    "id": "musculosa-les-vans",
+    "name": "Les Vans tank",
+    "description": "Tank version of the Les Vans top, extra long for harness-friendly coverage.",
+    "features": [
+      "Built-in top",
+      "Plain or mixed",
+      "Ideal for climbing",
+      "Minimalist design"
+    ],
+    "composition": "Composition: 96% cotton / 4% lycra",
+    "images": ["/images/producto-musculosa-01.jpg"]
+  },
+  {
+    "id": "bikini-bottom",
+    "name": "Bikini bottom",
+    "description": "Three bikini bottom styles to pair with your Les Vans top.",
+    "features": [
+      "Sporty cut",
+      "Extralife lycra",
+      "Comfortable fit"
+    ],
+    "composition": "Composition: 88% nylon / 12% lycra",
+    "images": ["/images/producto-bikini-bottom-01.jpg"]
+  },
+  {
+    "id": "ediciones-especiales",
+    "name": "Special editions",
+    "description": "Dresses or pants in occasional small-run capsules.",
+    "features": [
+      "Limited runs",
+      "Colour and cut experimentation",
+      "Variable availability"
+    ],
+    "composition": "Composition varies by garment",
+    "images": ["/images/producto-edicion-especial-01.jpg"],
+    "badge": "Limited"
+  }
+]

@@ -34,6 +34,7 @@ const DEFAULT_CONTENT: Record<string, unknown> = {
 
 type DocumentEditorProps = {
   slug: string;
+  locale: "es" | "en";
   initialContent: unknown;
   version: number;
   updatedAt: string | null;
@@ -48,7 +49,7 @@ function formatTime(iso: string) {
   }
 }
 
-export function DocumentEditor({ slug, initialContent, version, updatedAt }: DocumentEditorProps) {
+export function DocumentEditor({ slug, locale, initialContent, version, updatedAt }: DocumentEditorProps) {
   const [content, setContent] = useState<unknown>(() => initialContent ?? DEFAULT_CONTENT[slug] ?? {});
   const [status, setStatus] = useState<Status>("idle");
   const [lastSaved, setLastSaved] = useState<string | null>(updatedAt ? formatTime(updatedAt) : null);
@@ -59,7 +60,7 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
       const toSave = overrideContent !== undefined ? overrideContent : content;
       setStatus("saving");
       try {
-        const res = await fetch(`/api/admin/documents/${slug}`, {
+        const res = await fetch(`/api/admin/documents/${slug}?locale=${locale}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(toSave)
@@ -78,7 +79,7 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
         setStatus("error");
       }
     },
-    [slug, content]
+    [slug, locale, content]
   );
 
   const setContentAndDirty = useCallback((arg: unknown | ((prev: unknown) => unknown)) => {

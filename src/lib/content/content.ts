@@ -3,6 +3,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import {
   getParsedDocument,
+  type Locale,
   siteSchema,
   productsSchema,
   faqSchema,
@@ -19,7 +20,15 @@ async function readJsonFile<T>(filename: string, schema: { parse: (v: unknown) =
   return schema.parse(JSON.parse(raw));
 }
 
-const defaultStoryContent: StoryContent = {
+async function readJsonFileIfExists<T>(filename: string, schema: { parse: (v: unknown) => T }): Promise<T | null> {
+  try {
+    return await readJsonFile(filename, schema);
+  } catch {
+    return null;
+  }
+}
+
+const defaultStoryContentEs: StoryContent = {
   image: "/images/galeria-01.jpg",
   imageAlt: "Top Les Vans en entorno de montaña",
   paragraphs: [
@@ -29,41 +38,67 @@ const defaultStoryContent: StoryContent = {
   ]
 };
 
-export const getSiteContent = cache(async (_locale: "es" = "es"): Promise<SiteContent> => {
-  const result = await getParsedDocument<SiteContent>("site");
+const defaultStoryContentEn: StoryContent = {
+  image: "/images/galeria-01.jpg",
+  imageAlt: "Les Vans top in mountain setting",
+  paragraphs: [
+    "That’s why we set out to design the perfect top so you feel comfortable whatever you do.",
+    "Versatile for any outdoor adventure, you can wear it for weeks while hiking, climbing, running, skiing, doing yoga or by the lake. Breaking away from classic sportswear design, our tops are made for modern women … No annoying seams, reversible and extremely comfortable.",
+    "Our Les Vans top is the perfect companion for any adventure. We offer a wide range of colours. All our tops are limited edition."
+  ]
+};
+
+export const getSiteContent = cache(async (locale: Locale = "es"): Promise<SiteContent> => {
+  const result = await getParsedDocument<SiteContent>("site", locale);
   if (result) return result.content;
+  const file = await readJsonFileIfExists(`site.${locale}.json`, siteSchema);
+  if (file) return file;
   return readJsonFile("site.es.json", siteSchema);
 });
 
-export const getProducts = cache(async (_locale: "es" = "es"): Promise<ProductItem[]> => {
-  const result = await getParsedDocument<ProductItem[]>("products");
+export const getProducts = cache(async (locale: Locale = "es"): Promise<ProductItem[]> => {
+  const result = await getParsedDocument<ProductItem[]>("products", locale);
   if (result) return result.content;
+  const file = await readJsonFileIfExists(`products.${locale}.json`, productsSchema);
+  if (file) return file;
   return readJsonFile("products.es.json", productsSchema);
 });
 
-export const getFaq = cache(async (_locale: "es" = "es"): Promise<FAQItem[]> => {
-  const result = await getParsedDocument<FAQItem[]>("faq");
+export const getFaq = cache(async (locale: Locale = "es"): Promise<FAQItem[]> => {
+  const result = await getParsedDocument<FAQItem[]>("faq", locale);
   if (result) return result.content;
+  const file = await readJsonFileIfExists(`faq.${locale}.json`, faqSchema);
+  if (file) return file;
   return readJsonFile("faq.es.json", faqSchema);
 });
 
-export const getGallery = cache(async (): Promise<GalleryItem[]> => {
-  const result = await getParsedDocument<GalleryItem[]>("gallery");
+export const getGallery = cache(async (locale: Locale = "es"): Promise<GalleryItem[]> => {
+  const result = await getParsedDocument<GalleryItem[]>("gallery", locale);
   if (result) return result.content;
+  const file = await readJsonFileIfExists(`gallery.${locale}.json`, gallerySchema);
+  if (file) return file;
   return readJsonFile("gallery.json", gallerySchema);
 });
 
-export const getAboutMarkdown = cache(async (): Promise<string> => {
-  const result = await getParsedDocument<AboutContent>("about");
+export const getAboutMarkdown = cache(async (locale: Locale = "es"): Promise<string> => {
+  const result = await getParsedDocument<AboutContent>("about", locale);
   if (result) return result.content.markdown;
-  const raw = await fs.readFile(path.join(contentDir, "about.md"), "utf-8");
-  return aboutSchema.parse({ markdown: raw }).markdown;
+  const enPath = path.join(contentDir, "about.en.md");
+  const esPath = path.join(contentDir, "about.md");
+  const pathToRead = locale === "en" ? enPath : esPath;
+  try {
+    const raw = await fs.readFile(pathToRead, "utf-8");
+    return aboutSchema.parse({ markdown: raw }).markdown;
+  } catch {
+    const raw = await fs.readFile(esPath, "utf-8");
+    return aboutSchema.parse({ markdown: raw }).markdown;
+  }
 });
 
-export const getStoryContent = cache(async (): Promise<StoryContent> => {
-  const result = await getParsedDocument<StoryContent>("story");
+export const getStoryContent = cache(async (locale: Locale = "es"): Promise<StoryContent> => {
+  const result = await getParsedDocument<StoryContent>("story", locale);
   if (result) return result.content;
-  return defaultStoryContent;
+  return locale === "en" ? defaultStoryContentEn : defaultStoryContentEs;
 });
 
 export { siteSchema, productsSchema, faqSchema, gallerySchema, aboutSchema, storySchema };

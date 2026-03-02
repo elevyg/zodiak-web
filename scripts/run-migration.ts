@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { createClient } from "@libsql/client";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 const url = process.env.TURSO_URL;
@@ -11,16 +11,17 @@ if (!url || !authToken) {
 }
 
 const client = createClient({ url, authToken });
-const sql = readFileSync(join(process.cwd(), "scripts", "migrations", "001_cms.sql"), "utf-8");
-const statements = sql
-  .split(";")
-  .map((s) => s.trim())
-  .filter(Boolean);
+const migrationsDir = join(process.cwd(), "scripts", "migrations");
+const files = readdirSync(migrationsDir).filter((f) => f.endsWith(".sql")).sort();
 
 async function run() {
-  for (const statement of statements) {
-    await client.execute(statement + ";");
-    console.log("Executed:", statement.slice(0, 50) + "...");
+  for (const file of files) {
+    const sql = readFileSync(join(migrationsDir, file), "utf-8");
+    const statements = sql.split(";").map((s) => s.trim()).filter(Boolean);
+    for (const statement of statements) {
+      await client.execute(statement + ";");
+      console.log("[%s] Executed: %s...", file, statement.slice(0, 50));
+    }
   }
   console.log("Migration complete.");
 }

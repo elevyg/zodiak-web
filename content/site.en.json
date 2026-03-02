@@ -1,0 +1,70 @@
+{
+  "meta": {
+    "title": "Zodiak Climb | Handcrafted apparel for climbers",
+    "description": "Zodiak Climb creates handcrafted apparel for women climbers. Limited editions made in Patagonia.",
+    "ogTitle": "Zodiak Climb",
+    "ogDescription": "Les Vans tops and exclusive pieces made by hand in San Carlos de Bariloche."
+  },
+  "nav": [
+    { "label": "Products", "href": "#productos" },
+    { "label": "About us", "href": "#marca" },
+    { "label": "FAQ", "href": "#faq" },
+    { "label": "Contact", "href": "#contacto" }
+  ],
+  "hero": {
+    "eyebrow": "",
+    "title": "The revolution in sports tops for women who climb",
+    "subtitle": "We love to travel. We love nature. We love climbing and skiing.",
+    "ctaPrimary": {
+      "label": "View products",
+      "href": "#productos"
+    },
+    "ctaSecondary": {
+      "label": "Message on WhatsApp",
+      "href": "https://wa.me/5492944606083?text=Hi%20Zodiak%2C%20I%20want%20to%20learn%20about%20your%20products"
+    },
+    "image": "/images/hero-les-vans.jpg",
+    "imageAlt": "Female climber wearing Zodiak top on rock"
+  },
+  "brandStory": {
+    "title": "About us",
+    "paragraphs": [
+      "Zodiak was born from a very concrete need: to find the perfect top for climbing. We couldn’t find it, so we designed it. We wanted a garment that followed the real movement of the body, that supported without discomfort and felt comfortable not only on the wall, but in any sport, in the mountains, by the lake, or whatever you do.",
+      "That first design was the starting point.",
+      "Over time we evolved. We tested, adjusted, improved and expanded the line. Today we have several models for different ways of moving, different bodies and different settings. Each piece keeps the same original idea: function, comfort and character.",
+      "Today Zodiak crosses borders. We sell worldwide and an athlete wore our products at a Climbing World Cup, taking the brand to the highest stage of international competition.",
+      "More and more climbers choose us. And many come back after trying us once. For us, that’s what matters most: that the garment works in real use and that whoever wears it wants to repeat.",
+      "We keep creating from the same place as at the start: real experience, movement and the constant search for something better."
+    ]
+  },
+  "reviews": {
+    "title": "Stories in motion",
+    "subtitle": "Real voices. Real experiences.",
+    "items": [
+      { "name": "Sofía", "age": 34, "quote": "Honestly, I thought it would be ‘just another one’. But I wore it all day, trained, went out, came home… and never wanted to take it off." },
+      { "name": "Mica", "age": 28, "quote": "I hardly have any others in my closet now. Without realizing it I ended up always wearing yours." },
+      { "name": "Agustina", "age": 31, "quote": "I was worried it wouldn’t support me well. When I tried it on it was like ‘ok, this is it’. I felt comfortable from the first minute." },
+      { "name": "Flor", "age": 26, "quote": "I bought one to try… and a month later I came back for another. Didn’t plan it." },
+      { "name": "Mariana", "age": 30, "quote": "I have all the models 🙈 but my favourite is the Les Vans low neckline. Finally a top that doesn’t squash me." },
+      { "name": "Laura", "age": 42, "quote": "I’m not 20 and I don’t just wear anything to train anymore. This supports me well and doesn’t leave that uncomfortable feeling after a while. I really value that." },
+      { "name": "Verónica", "age": 45, "quote": "I use it for walking, light training and sometimes all day at home. It’s genuinely comfortable, not just at first." },
+      { "name": "Julieta", "age": 32, "quote": "I keep choosing them because I already know how they fit. No more guessing." },
+      { "name": "Emily", "age": 30, "quote": "I didn’t expect to love it this much. Now it’s just the one I grab without thinking." },
+      { "name": "Giulia", "age": 29, "quote": "All’inizio volevo solo provarlo. Adesso è quello che uso più spesso." },
+      { "name": "Anna", "age": 28, "quote": "Ich war unsicher… aber es sitzt einfach gut. Kein Rutschen, kein Drücken." },
+      { "name": "Sabine", "age": 43, "quote": "Ich brauche guten Halt, aber ohne Druckgefühl. Genau das habe ich hier gefunden." },
+      { "name": "Mara", "age": 27, "quote": "Hab’s meiner Freundin empfohlen… jetzt fragt sie mich, wann ich wieder bestelle 😅" },
+      { "name": "Cami", "age": 25, "quote": "It fit me perfectly. And I’m really picky about tops." }
+    ]
+  },
+  "contact": {
+    "title": "We’d love to meet you",
+    "subtitle": "Direct contact",
+    "location": "San Carlos de Bariloche, Río Negro, Argentina. By appointment.",
+    "phone": "+54 9 2944 606083",
+    "whatsappLink": "https://wa.me/5492944606083?text=Hi%20Zodiak%2C%20I%20want%20to%20schedule%20a%20visit"
+  },
+  "social": {
+    "instagram": "https://www.instagram.com/zodiak_climb/?hl=es-la"
+  }
+}

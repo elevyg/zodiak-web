@@ -5,10 +5,11 @@ import { useEffect, useState } from "react"
 import type { NavItem } from "@/lib/content/types"
 
 type HeaderProps = {
-  nav: NavItem[]
+  nav: NavItem[];
+  locale: "es" | "en";
 }
 
-export function Header({ nav }: HeaderProps) {
+export function Header({ nav, locale }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
@@ -82,7 +83,7 @@ export function Header({ nav }: HeaderProps) {
 
         <nav
           aria-label="Principal"
-          className={`hidden max-w-[60vw] gap-4 overflow-x-auto text-xs uppercase tracking-[0.12em] md:flex md:max-w-none md:gap-6 md:text-sm ${
+          className={`hidden max-w-[60vw] items-center gap-4 overflow-x-auto text-xs uppercase tracking-[0.12em] md:flex md:max-w-none md:gap-6 md:text-sm ${
             isScrolled ? "text-ink" : "text-inverse"
           }`}
         >
@@ -95,6 +96,15 @@ export function Header({ nav }: HeaderProps) {
               {item.label}
             </a>
           ))}
+          <span className="flex gap-1.5 text-[0.7em] opacity-80">
+            <a
+              href={locale === "es" ? "/en" : "/es"}
+              className={`transition ${isScrolled ? "hover:text-accentStrong" : "hover:text-accent"}`}
+              aria-label={locale === "es" ? "Switch to English" : "Cambiar a español"}
+            >
+              {locale === "es" ? "EN" : "ES"}
+            </a>
+          </span>
         </nav>
       </div>
 
@@ -132,6 +142,13 @@ export function Header({ nav }: HeaderProps) {
                 {item.label}
               </a>
             ))}
+            <a
+              href={locale === "es" ? "/en" : "/es"}
+              onClick={() => setIsMenuOpen(false)}
+              className="rounded-2xl px-4 py-3 transition hover:bg-surface hover:text-accentStrong opacity-80"
+            >
+              {locale === "es" ? "English" : "Español"}
+            </a>
           </nav>
         </div>
       </div>
