@@ -16,8 +16,14 @@ export function ProductsSection({ items }: ProductsSectionProps) {
         {items.map((item) => (
           <article key={item.id} className="rounded-3xl border border-border bg-surface p-5 shadow-card">
             <div className="grid gap-4 sm:grid-cols-[180px_1fr]">
-              <div className="relative h-44 overflow-hidden rounded-2xl">
-                <Image src={item.images[0]} alt={item.name} fill className="object-cover" />
+              <div className="relative h-44 overflow-hidden rounded-2xl bg-surfaceStrong">
+                {item.images[0] ? (
+                  <Image src={item.images[0]} alt={item.name} fill className="object-cover" />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center text-inkMuted/50 text-sm">
+                    No image
+                  </div>
+                )}
               </div>
               <div className="space-y-3">
                 <div className="flex items-center gap-2">

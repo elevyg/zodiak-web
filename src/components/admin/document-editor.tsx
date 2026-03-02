@@ -3,6 +3,7 @@
 import { useCallback, useState } from "react";
 import { SaveBar } from "./autosave-bar";
 import { ImageUpload } from "./image-upload";
+import { ProductImageUpload } from "./product-image-upload";
 
 type Status = "idle" | "saving" | "saved" | "error";
 
@@ -464,76 +465,28 @@ export function DocumentEditor({ slug, initialContent, version, updatedAt }: Doc
                   className="w-full rounded border border-[var(--border)] px-2 py-1.5 text-sm"
                 />
                 <div>
-                  <label className="block text-sm text-[var(--ink-muted)] mb-1">Images</label>
-                  <div className="flex flex-wrap gap-3 items-start">
-                    {(Array.isArray(item?.images) ? (item.images as string[]) : []).map((img, j) => (
-                      <div key={j} className="flex flex-col gap-2">
-                        <div className="flex items-start gap-2">
-                          <ImageUpload
-                            value={img}
-                            buttonLabel="Replace"
-                            onChange={(url) => {
-                              setContentAndDirty((prev: unknown) => {
-                                const arr = (prev as Array<Record<string, unknown>>) ?? [];
-                                const next = arr.map((it, idx) =>
-                                  idx === i
-                                    ? {
-                                        ...it,
-                                        images: (Array.isArray(it.images) ? [...(it.images as string[])] : []).map(
-                                          (u, k) => (k === j ? url : u)
-                                        )
-                                      }
-                                    : it
-                                );
-                                save(next);
-                                return next;
-                              });
-                            }}
-                          />
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setContentAndDirty((prev: unknown) => {
-                                const arr = (prev as Array<Record<string, unknown>>) ?? [];
-                                return arr.map((it, idx) =>
-                                  idx === i
-                                    ? {
-                                        ...it,
-                                        images: (Array.isArray(it.images) ? (it.images as string[]) : []).filter(
-                                          (_, k) => k !== j
-                                        )
-                                      }
-                                    : it
-                                );
-                              });
-                            }}
-                            className="text-sm text-red-600 hover:underline shrink-0"
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                    <ImageUpload
-                      value=""
-                      buttonLabel="Add image"
-                      onChange={(url) => {
-                        setContentAndDirty((prev: unknown) => {
-                          const arr = (prev as Array<Record<string, unknown>>) ?? [];
-                          const next = arr.map((it, idx) =>
-                            idx === i
-                              ? {
-                                  ...it,
-                                  images: [...(Array.isArray(it.images) ? (it.images as string[]) : []), url]
-                                }
-                              : it
-                          );
-                          save(next);
-                          return next;
-                        });
-                      }}
-                    />
-                  </div>
+                  <label className="block text-sm text-[var(--ink-muted)] mb-2">Image</label>
+                  <ProductImageUpload
+                    value={(Array.isArray(item?.images) ? (item.images as string[])[0] : "") ?? ""}
+                    onChange={(url) => {
+                      setContentAndDirty((prev: unknown) => {
+                        const arr = (prev as Array<Record<string, unknown>>) ?? [];
+                        const next = arr.map((it, idx) =>
+                          idx === i ? { ...it, images: [url] } : it
+                        );
+                        save(next);
+                        return next;
+                      });
+                    }}
+                    onRemove={() => {
+                      setContentAndDirty((prev: unknown) => {
+                        const arr = (prev as Array<Record<string, unknown>>) ?? [];
+                        const next = arr.map((it, idx) => (idx === i ? { ...it, images: [] } : it));
+                        save(next);
+                        return next;
+                      });
+                    }}
+                  />
                 </div>
                 <button
                   type="button"
